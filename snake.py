@@ -6,36 +6,37 @@ from food import Food
 class Snake:
 
     def __init__(self, pos, headColor):
-        self.__body = []
-        self.__body.append(Food(pos, headColor))
-        self.head = self.__body[0]
+        self.body = []
+        self.body.append(Food(pos, headColor))
+        self.head = self.body[0]
         self.direction = DIRECTIONS["DOWN"]
 
     def turn(self, direction):
-        if (direction == DIRECTIONS["UP"]) and (self.direction != DIRECTIONS["DOWN"]):
-            self.direction = DIRECTIONS["UP"]
-        if (direction == DIRECTIONS["DOWN"]) and (self.direction != DIRECTIONS["UP"]):
-            self.direction = DIRECTIONS["DOWN"]
-        if (direction == DIRECTIONS["LEFT"]) and (self.direction != DIRECTIONS["RIGHT"]):
-            self.direction = DIRECTIONS["LEFT"]
-        if (direction == DIRECTIONS["RIGHT"]) and (self.direction != DIRECTIONS["LEFT"]):
-            self.direction = DIRECTIONS["RIGHT"]
+        opposite = {
+            DIRECTIONS["UP"]: DIRECTIONS["DOWN"],
+            DIRECTIONS["DOWN"]: DIRECTIONS["UP"],
+            DIRECTIONS["LEFT"]: DIRECTIONS["RIGHT"],
+            DIRECTIONS["RIGHT"]: DIRECTIONS["LEFT"],
+        }
 
-    def addCube(self, color):
-        pos = self.__body[-1].getPos()
-        self.__body.append(Food(pos, color))
+        if direction != opposite[self.direction]:
+            self.direction = direction
+
+    def grow(self, color):
+        pos = self.body[-1].getPos()
+        self.body.append(Food(pos, color))
 
     def move(self):
-        if len(self.__body) > 1:
-            for i in range(len(self.__body)-1, 0, -1):
-                self.__body[i].setPos(self.__body[i-1].getPos())
+        if len(self.body) > 1:
+            for i in range(len(self.body)-1, 0, -1):
+                self.body[i].setPos(self.body[i-1].getPos())
 
         self.head.setPos([x + y for x, y in zip(self.head.getPos(), self.direction)])
 
-        if len(self.__body) > 1:
-            for part in self.__body[1:]:
+        if len(self.body) > 1:
+            for part in self.body[1:]:
                 if self.head.getPos() == part.getPos():
-                    return False
+                    return True
 
         pos = self.head.getPos()
         if pos[0] < CONFIG["zero"]:
@@ -51,10 +52,10 @@ class Snake:
             pos[1] = CONFIG["zero"]
             self.head.setPos(pos)
 
-        return True
+        return False
 
     def getHeadPos(self):
         return self.head.getPos()
 
     def getSnakeBody(self):
-        return self.__body
+        return self.body

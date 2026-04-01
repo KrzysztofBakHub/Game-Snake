@@ -12,5 +12,5 @@ COLORS = {
     "orange": (255, 165, 0)
 }
 
-FPS = 60
+FPS = 10
 DELAY = 100
