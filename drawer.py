@@ -20,7 +20,6 @@ class Drawer:
     def redrawWindow(self):
         self.__screen.fill(COLORS["black"])
         self.drawGrid()
-        pygame.display.update()
 
     def drawRect(self, rect):
         dis = CONFIG["width"] // CONFIG["rows"]
@@ -29,4 +28,6 @@ class Drawer:
         j = pos[1]
 
         pygame.draw.rect(self.__screen, rect.getColor(), (i * dis + 1, j * dis + 1, dis - 1, dis - 1))
+
+    def update_window(self):
         pygame.display.update()

@@ -52,5 +52,6 @@ if __name__ == '__main__':
         for bodyPart in snake.getSnakeBody():
             drawer.drawRect(bodyPart)
         drawer.drawRect(snack)
+        drawer.update_window()
 
     pygame.quit()
