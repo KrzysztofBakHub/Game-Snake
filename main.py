@@ -20,14 +20,11 @@ def generate_food_position(snake_body, rows):
             return [position[0], position[1]]
 
 def restart():
-    snake = Snake([random.randint(0, CONFIG["rows"] - 1), random.randint(0, CONFIG["rows"] - 1)], COLORS["red"])
-    snack = Food([random.randint(0, CONFIG["rows"] - 1), random.randint(0, CONFIG["rows"] - 1)], COLORS["green"])
+    new_snake = Snake([random.randint(0, CONFIG["rows"] - 1), random.randint(0, CONFIG["rows"] - 1)], COLORS["red"])
+    new_snack = Food(generate_food_position(new_snake.getSnakeBody(), CONFIG['rows']), COLORS["green"])
+    new_score = 0
 
-    score = 0
-    game_over = False
-    running = True
-
-    return snake, snack, score, game_over, running
+    return new_snake, new_snack, new_score
 
 if __name__ == '__main__':
 
@@ -35,40 +32,40 @@ if __name__ == '__main__':
     drawer = Drawer(CONFIG["width"], CONFIG["width"])
     clock = pygame.time.Clock()
 
-    snake, snack, score, game_over, running = restart()
+    game_running = True
 
-    while running:
+    snake, snack, score = restart()
+
+    while game_running:
         clock.tick(config.FPS)
-
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
+            match event.type:
+                case pygame.QUIT:
+                    game_running = False
+                case pygame.KEYDOWN:
+                    match event.key:
+                        case pygame.K_UP:
+                            snake.turn(DIRECTIONS["UP"])
+                        case pygame.K_DOWN:
+                            snake.turn(DIRECTIONS["DOWN"])
+                        case pygame.K_LEFT:
+                            snake.turn(DIRECTIONS["LEFT"])
+                        case pygame.K_RIGHT:
+                            snake.turn(DIRECTIONS["RIGHT"])
+                        case pygame.K_q:
+                            game_running = False
+                        case pygame.K_r if not snake.is_alive():
+                            snake, snack, score = restart()
 
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
-                    snake.turn(DIRECTIONS["UP"])
-                if event.key == pygame.K_DOWN:
-                    snake.turn(DIRECTIONS["DOWN"])
-                if event.key == pygame.K_LEFT:
-                    snake.turn(DIRECTIONS["LEFT"])
-                if event.key == pygame.K_RIGHT:
-                    snake.turn(DIRECTIONS["RIGHT"])
-                if event.key == pygame.K_q:
-                    running = False
-                if event.key == pygame.K_r:
-                    snake, snack, score, game_over, running = restart()
-
-        if not game_over:
+        if snake.is_alive():
             if snake.getHeadPos() == snack.getPos():
                 snake.grow(COLORS["orange"])
                 snack = Food(generate_food_position(snake.getSnakeBody(), CONFIG['rows']), COLORS["green"])
                 score += 1
 
-            game_over = snake.move()
+            snake.move()
 
-            #print(str(snake.getHeadPos()) + ", " + str(snack.getPos()))
-
-            drawer.redrawWindow()
+            drawer.drawWindow()
             for bodyPart in snake.getSnakeBody():
                 drawer.drawRect(bodyPart)
             drawer.drawRect(snack)

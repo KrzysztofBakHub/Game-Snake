@@ -17,7 +17,7 @@ class Drawer:
             pygame.draw.line(self.__screen, COLORS["white"], (x, 0), (x, CONFIG["width"]))
             pygame.draw.line(self.__screen, COLORS["white"], (0, y), (CONFIG["width"], y))
 
-    def redrawWindow(self):
+    def drawWindow(self):
         self.__screen.fill(COLORS["black"])
         self.drawGrid()
 

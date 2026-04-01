@@ -10,6 +10,7 @@ class Snake:
         self.body.append(Food(pos, headColor))
         self.head = self.body[0]
         self.direction = DIRECTIONS["DOWN"]
+        self.alive = True
 
     def turn(self, direction):
         opposite = {
@@ -36,7 +37,7 @@ class Snake:
         if len(self.body) > 1:
             for part in self.body[1:]:
                 if self.head.getPos() == part.getPos():
-                    return True
+                    self.alive = False
 
         pos = self.head.getPos()
         if pos[0] < CONFIG["zero"]:
@@ -52,10 +53,11 @@ class Snake:
             pos[1] = CONFIG["zero"]
             self.head.setPos(pos)
 
-        return False
-
     def getHeadPos(self):
         return self.head.getPos()
 
     def getSnakeBody(self):
         return self.body
+
+    def is_alive(self):
+        return self.alive
