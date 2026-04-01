@@ -11,3 +11,6 @@ COLORS = {
     "black": (0, 0, 0),
     "orange": (255, 165, 0)
 }
+
+FPS = 60
+DELAY = 100

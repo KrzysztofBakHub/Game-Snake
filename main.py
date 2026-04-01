@@ -6,6 +6,18 @@ from drawer import Drawer
 from controls import DIRECTIONS
 from config import CONFIG
 from config import COLORS
+import config
+
+def generate_food_position(snake_body, rows):
+    occupied_positions = {tuple(part.getPos()) for part in snake_body}
+
+    while True:
+        position = (
+            random.randint(0, rows - 1),
+            random.randint(0, rows - 1)
+        )
+        if position not in occupied_positions:
+            return [position[0], position[1]]
 
 
 if __name__ == '__main__':
@@ -20,8 +32,8 @@ if __name__ == '__main__':
     running = True
 
     while running:
-        pygame.time.delay(100)
-        clock.tick(10)
+        pygame.time.delay(config.DELAY)
+        clock.tick(config.FPS)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -41,8 +53,7 @@ if __name__ == '__main__':
 
         if snake.getHeadPos() == snack.getPos():
             snake.addCube(COLORS["orange"])
-            snack = Food([random.randint(0, CONFIG["rows"] - 1), random.randint(0, CONFIG["rows"] - 1)],
-                         COLORS["green"])
+            snack = Food(generate_food_position(snake.getSnakeBody(), CONFIG['rows']), COLORS["green"])
 
         running = snake.move()
 
