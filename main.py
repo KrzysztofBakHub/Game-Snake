@@ -43,8 +43,8 @@ if __name__ == '__main__':
             snake.addCube(COLORS["orange"])
             snack = Food([random.randint(0, CONFIG["rows"] - 1), random.randint(0, CONFIG["rows"] - 1)],
                          COLORS["green"])
-        else:
-            running = snake.move()
+
+        running = snake.move()
 
         print(str(snake.getHeadPos()) + ", " + str(snack.getPos()))
 

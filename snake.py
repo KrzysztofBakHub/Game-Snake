@@ -1,6 +1,6 @@
 from config import CONFIG
 from controls import DIRECTIONS
-from food import *
+from food import Food
 
 
 class Snake:
@@ -12,25 +12,20 @@ class Snake:
         self.direction = DIRECTIONS["DOWN"]
 
     def turn(self, direction):
-        if (direction == DIRECTIONS["UP"]) & (self.direction != DIRECTIONS["DOWN"]):
+        if (direction == DIRECTIONS["UP"]) and (self.direction != DIRECTIONS["DOWN"]):
             self.direction = DIRECTIONS["UP"]
-        if (direction == DIRECTIONS["DOWN"]) & (self.direction != DIRECTIONS["UP"]):
+        if (direction == DIRECTIONS["DOWN"]) and (self.direction != DIRECTIONS["UP"]):
             self.direction = DIRECTIONS["DOWN"]
-        if (direction == DIRECTIONS["LEFT"]) & (self.direction != DIRECTIONS["RIGHT"]):
+        if (direction == DIRECTIONS["LEFT"]) and (self.direction != DIRECTIONS["RIGHT"]):
             self.direction = DIRECTIONS["LEFT"]
-        if (direction == DIRECTIONS["RIGHT"]) & (self.direction != DIRECTIONS["LEFT"]):
+        if (direction == DIRECTIONS["RIGHT"]) and (self.direction != DIRECTIONS["LEFT"]):
             self.direction = DIRECTIONS["RIGHT"]
-
-    def reset(self):
-        pass
 
     def addCube(self, color):
         pos = self.__body[-1].getPos()
-        self.move()
         self.__body.append(Food(pos, color))
 
     def move(self):
-        running = True
         if len(self.__body) > 1:
             for i in range(len(self.__body)-1, 0, -1):
                 self.__body[i].setPos(self.__body[i-1].getPos())
@@ -40,7 +35,7 @@ class Snake:
         if len(self.__body) > 1:
             for part in self.__body[1:]:
                 if self.head.getPos() == part.getPos():
-                    running = False
+                    return False
 
         pos = self.head.getPos()
         if pos[0] < CONFIG["zero"]:
@@ -56,13 +51,10 @@ class Snake:
             pos[1] = CONFIG["zero"]
             self.head.setPos(pos)
 
-        return running
+        return True
 
     def getHeadPos(self):
-        try:
-            return self.head.getPos()
-        except TypeError:
-            print("Snake does not exist")
+        return self.head.getPos()
 
     def getSnakeBody(self):
         return self.__body
