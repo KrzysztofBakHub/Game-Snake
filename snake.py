@@ -38,6 +38,7 @@ class Snake:
             for part in self.body[1:]:
                 if self.head.getPos() == part.getPos():
                     self.alive = False
+                    return
 
         pos = self.head.getPos()
         if pos[0] < CONFIG["zero"]:

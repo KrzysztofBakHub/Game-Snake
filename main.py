@@ -29,6 +29,7 @@ def restart():
 if __name__ == '__main__':
 
     pygame.init()
+
     drawer = Drawer(CONFIG["width"], CONFIG["width"])
     clock = pygame.time.Clock()
 
@@ -69,6 +70,9 @@ if __name__ == '__main__':
             for bodyPart in snake.getSnakeBody():
                 drawer.drawRect(bodyPart)
             drawer.drawRect(snack)
+            drawer.draw_score(score)
+        else:
+            drawer.draw_post_game_info(score)
 
         drawer.update_window()
 
